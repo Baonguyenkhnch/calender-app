@@ -1,0 +1,554 @@
+/* ===== Main Container ===== */
+.calendar-app {
+  background: #0d1117;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.main-container {
+  background: #161b22;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 1200px;
+  height: 100vh;
+  display: flex;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+/* ===== Calendar Panel ===== */
+.calendar-panel {
+  flex: 1;
+  padding: 2rem;
+  position: relative;
+  background: linear-gradient(135deg, #161b22 0%, #21262d 100%);
+}
+
+.calendar-header {
+  margin-bottom: 2rem;
+}
+
+.heading {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.month-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.month-display {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.month, .year {
+  color: #f97316;
+}
+
+.navigation {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-btn {
+  background: #21262d;
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #f97316;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: #30363d;
+  transform: scale(1.05);
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.weekdays span {
+  color: #8b949e;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.8rem 0;
+  position: relative;
+}
+
+.weekdays span:nth-child(3) {
+  color: #f97316;
+  font-weight: bold;
+}
+
+/* ===== Days Grid - Vòng tròn bo tròn hoàn toàn ===== */
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+}
+
+.empty-day {
+  visibility: hidden;
+}
+
+.day {
+  /* Kích thước cố định cho hình tròn hoàn hảo */
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  
+  /* Căn giữa số hoàn hảo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Typography */
+  color: #8b949e;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  
+  /* Interaction */
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  background: rgba(33, 38, 45, 0.6);
+  border: 2px solid rgba(139, 148, 158, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.day:hover {
+  background: linear-gradient(135deg, rgba(48, 54, 61, 0.8), rgba(33, 38, 45, 0.8)) !important;
+  color: #fff !important;
+  border-color: rgba(249, 115, 22, 0.6);
+  transform: scale(1.12) translateZ(0);
+  box-shadow: 
+    0 8px 25px rgba(249, 115, 22, 0.15),
+    0 0 0 1px rgba(249, 115, 22, 0.1);
+  z-index: 1;
+}
+
+/* Ngày hiện tại - hiệu ứng đặc biệt */
+.current-day {
+  background: conic-gradient(
+    from 0deg,
+    #f97316 0deg,
+    #ea580c 90deg,
+    #f97316 180deg,
+    #ea580c 270deg,
+    #f97316 360deg
+  ) !important;
+  color: #fff !important;
+  font-weight: 700;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 0 20px rgba(249, 115, 22, 0.5),
+    0 0 40px rgba(249, 115, 22, 0.3),
+    inset 0 2px 10px rgba(255, 255, 255, 0.1);
+  transform: scale(1.08) rotate(5deg);
+  animation: pulse 2s infinite;
+}
+
+/* Keyframe animation cho current-day */
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(249, 115, 22, 0.5),
+      0 0 40px rgba(249, 115, 22, 0.3),
+      inset 0 2px 10px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px rgba(249, 115, 22, 0.7),
+      0 0 60px rgba(249, 115, 22, 0.5),
+      inset 0 4px 15px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Cuối tuần (Saturday và Sunday) */
+.days-grid .day:nth-child(7n+1), /* Sunday */
+.days-grid .day:nth-child(7n) { /* Saturday */
+  color: #f97316;
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+.days-grid .day:nth-child(7n+1):hover,
+.days-grid .day:nth-child(7n):hover {
+  border-color: rgba(249, 115, 22, 0.8);
+}
+
+/* Click feedback */
+.day:active {
+  transform: scale(0.95);
+  transition: transform 0.1s;
+}
+
+/* ===== Event Popup ===== */
+.event-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.event-popup {
+  background: #21262d;
+  width: 90%;
+  max-width: 25rem;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.7);
+  z-index: 1001;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-header h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #8b949e;
+  font-size: 1.5rem;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #f97316;
+  background: #30363d;
+}
+
+.popup-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.event-date-display {
+  padding: 0.75rem;
+  background: #30363d;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.selected-date {
+  color: #f97316;
+  font-weight: bold;
+}
+
+.form-group-time {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.time-input {
+  background: #30363d;
+  border: 1px solid #30363d;
+  border-radius: 0.25rem;
+  color: #fff;
+  width: 3.5rem;
+  height: 2.5rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  outline: none;
+  transition: all 0.3s ease;
+  padding: 0 0.25rem;
+}
+
+.time-input:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0.5rem rgba(249, 115, 22, 0.3);
+  background: #40444b;
+}
+
+.time-separator {
+  color: #8b949e;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.textarea-container {
+  position: relative;
+}
+
+.event-textarea {
+  width: 100%;
+  min-height: 60px;
+  max-height: 80px;
+  resize: vertical;
+  background: #30363d;
+  border: 1px solid #30363d;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.event-textarea:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0.5rem rgba(249, 115, 22, 0.3);
+  background: #40444b;
+}
+
+.event-textarea::placeholder {
+  color: #8b949e;
+  font-size: 0.85rem;
+}
+
+.char-count {
+  position: absolute;
+  bottom: 0.25rem;
+  right: 0.75rem;
+  color: #8b949e;
+  font-size: 0.75rem;
+}
+
+.add-event-btn {
+  width: 100%;
+  height: 3rem;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0.25rem 1rem rgba(249, 115, 22, 0.4);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.add-event-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  box-shadow: 0 0.5rem 1.5rem rgba(249, 115, 22, 0.6);
+  transform: translateY(-1px);
+}
+
+.add-event-btn:disabled {
+  background: #30363d;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+/* ===== Events Panel ===== */
+.events-panel {
+  flex: 1;
+  padding: 2rem;
+  background: #161b22;
+  overflow-y: auto;
+}
+
+.event-list {
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.event-list h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  color: #f97316;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.no-events {
+  color: #8b949e;
+  font-style: italic;
+  text-align: center;
+  padding: 2rem;
+}
+
+.event-item {
+  background: linear-gradient(135deg, #0099ff, #0066cc);
+  border-radius: 0.8rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  color: #fff;
+  box-shadow: 0 0.5rem 1rem rgba(0, 153, 255, 0.2);
+  transition: all 0.3s ease;
+  border-left: 4px solid #f97316;
+}
+
+.event-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 153, 255, 0.3);
+}
+
+.event-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.event-date {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  color: #e2e8f0;
+}
+
+.event-time {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.event-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e2e8f0;
+  line-height: 1.4;
+}
+
+.event-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.event-actions i {
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #fff;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.event-actions i:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f97316;
+  transform: scale(1.1);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    height: auto;
+    max-height: 100vh;
+  }
+  
+  .calendar-panel,
+  .events-panel {
+    padding: 1rem;
+  }
+  
+  .event-popup {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .heading {
+    font-size: 1.5rem;
+  }
+  
+  .event-item {
+    padding: 1rem;
+  }
+  
+  /* Responsive cho vòng tròn ngày */
+  .days-grid {
+    gap: 0.4rem;
+  }
+  
+  .day {
+    width: 2.6rem;
+    height: 2.6rem;
+    font-size: 0.9rem;
+  }
+  
+  .day:hover {
+    transform: scale(1.08);
+  }
+  
+  .current-day {
+    transform: scale(1.05) rotate(2deg);
+  }
+}
+
+/* Dark mode enhancement */
+@media (prefers-color-scheme: dark) {
+  .day {
+    background: rgba(33, 38, 45, 0.7);
+  }
+}
